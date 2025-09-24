@@ -10,7 +10,7 @@ namespace Demo.Domain.Repositories
 {
     public interface IRepository<TAggregateRoot,TKey>
         where TAggregateRoot : class, IAggregateRoot<TKey>
-        where TKey : IComparable<TKey>
+        where TKey : IComparable
     {
         void Add(TAggregateRoot entity);
         Task AddAsync(TAggregateRoot entity);

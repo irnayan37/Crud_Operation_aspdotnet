@@ -6,6 +6,7 @@ using Autofac;
 using Demo.Web;
 using Microsoft.AspNetCore.Identity;
 using Demo.Infrastructure.Data;
+using Demo.Infrastructure.Extensions;
 
 
 Log.Logger = new LoggerConfiguration()
@@ -39,10 +40,11 @@ try
 
     #endregion
 
-    // Add services to the container.
+    #region Service collection base Dependency Injection Configuration
+    builder.Services.AddDependencyInjection();
+    #endregion
 
-    builder.Services.AddScoped(s =>
-      new ApplicationDbContext(connectionString, migrationAssembly?.FullName));
+    // Add services to the container.
 
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString,
@@ -64,6 +66,8 @@ try
     //builder.Services.AddScoped<IEmailUtililty, HtmlEmailUtility>();
     //builder.Services.AddKeyedScoped<IEmailUtililty, HtmlEmailUtility>("Setup1");//2 ta controller er alada alada setup constructor a dite hbe
     //builder.Services.AddKeyedScoped<IEmailUtililty, EmailUtility>("Setup2");
+    //builder.Services.AddScoped(s =>
+   // new ApplicationDbContext(connectionString, migrationAssembly?.FullName));
 
 
 
