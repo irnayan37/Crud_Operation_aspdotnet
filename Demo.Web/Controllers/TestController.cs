@@ -6,10 +6,10 @@ namespace Demo.Web.Controllers
 {
     public class TestController : Controller
     {
-        private readonly IEmailUtililty _emailUtility;
-        public TestController([FromKeyedServices("Setup1")] IEmailUtililty emailutility)
+        
+        public TestController()
         {
-            _emailUtility = emailutility;
+            
         }
         public IActionResult Index()
         {
@@ -19,7 +19,7 @@ namespace Demo.Web.Controllers
         public IActionResult Demo(DemoModel model)
         {
 
-            _emailUtility.SendEmail(model.Email, "Welcome", "Welcome to our Website");
+           // _emailUtility.SendEmail(model.Email, "Welcome", "Welcome to our Website");
 
             return View(model);
         }

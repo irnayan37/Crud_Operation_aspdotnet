@@ -1,16 +1,16 @@
-using Autofac.Extensions.DependencyInjection;
-using Autofac;
-using Demo.Web;
-using Demo.Web.Data;
-using Demo.Web.Utility;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Serilog;
+using Demo.Infrastructure.Data;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using Demo.Web;
+using Microsoft.AspNetCore.Identity;
 
-Log.Logger = new LoggerConfiguration()// Step 1: Bootstrap logger
-                .WriteTo.File("Logs/web-log-.log",
-                    rollingInterval: RollingInterval.Day)
+
+Log.Logger = new LoggerConfiguration()
+               .WriteTo.File("Logs/web-log-.log",
+                   rollingInterval: RollingInterval.Day)
                 .CreateBootstrapLogger();
 
 try
@@ -22,11 +22,11 @@ try
 
 
     #region Autofac Configuration
-    builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-    builder.Host.ConfigureContainer<ContainerBuilder>(ContainerBuilder =>
-    {
-        ContainerBuilder.RegisterModule(new WebModule(connectionString, migrationAssembly?.FullName));
-    });
+    //builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+    //builder.Host.ConfigureContainer<ContainerBuilder>(ContainerBuilder =>
+    //{
+    //    ContainerBuilder.RegisterModule(new WebModule(connectionString, migrationAssembly?.FullName));
+    //});
     #endregion
 
     #region Serilog Configuration// Step 2: Replace bootstrap logger with full logger
@@ -41,22 +41,30 @@ try
 
     // Add services to the container.
 
+    builder.Services.AddScoped(s =>
+      new ApplicationDbContext(connectionString, migrationAssembly?.FullName));
+
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString,
+    (x) => x.MigrationsAssembly(migrationAssembly)));
+
+    //IServiceCollection serviceCollection = builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    //    options.UseSqlServer(connectionString));
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+    
 
     builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddEntityFrameworkStores<ApplicationDbContext>();
     builder.Services.AddControllersWithViews();
+    builder.Services.AddRazorPages();
 
     // throw new Exception("Test Error");
     //builder.Services.AddSingleton<IEmailUtililty, HtmlEmailUtility>();
     //builder.Services.AddTransient<IEmailUtililty,HtmlEmailUtility>();
     //builder.Services.AddScoped<IEmailUtililty, HtmlEmailUtility>();
-    builder.Services.AddKeyedScoped<IEmailUtililty, HtmlEmailUtility>("Setup1");//2 ta controller er alada alada setup constructor a dite hbe
-    builder.Services.AddKeyedScoped<IEmailUtililty, EmailUtility>("Setup2");
-    //builder.Services.AddScoped<IEmailUtililty> (s =>
-    //    new HtmlEmailUtility("127.0.0.1"));
+    //builder.Services.AddKeyedScoped<IEmailUtililty, HtmlEmailUtility>("Setup1");//2 ta controller er alada alada setup constructor a dite hbe
+    //builder.Services.AddKeyedScoped<IEmailUtililty, EmailUtility>("Setup2");
+
 
 
     var app = builder.Build();
@@ -77,7 +85,7 @@ try
     app.UseStaticFiles();
 
     app.UseRouting();
-
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllerRoute(
@@ -97,9 +105,3 @@ finally
 {
     Log.CloseAndFlush();
 }
-/* 
- Bootstrap Logger = Startup ????? ?? ???? ?????
-
-Normal Logger = Application ???????? ?? ???? ?????
- 
- */

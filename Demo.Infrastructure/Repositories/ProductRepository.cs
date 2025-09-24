@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Demo.Domain.Repositories;
 
-namespace Demo.Application
+namespace Demo.Infrastructure.Repositories
 {
-    public class UserRepository
+    public class ProductRepository : IProductRepository
     {
-        public void Add(User user)
-        {
 
-        }
     }
 }
