@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Serilog;
-using Demo.Infrastructure.Data;
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using Demo.Web;
 using Microsoft.AspNetCore.Identity;
+using Demo.Infrastructure.Data;
 
 
 Log.Logger = new LoggerConfiguration()
@@ -18,7 +18,7 @@ try
     var builder = WebApplication.CreateBuilder(args);
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
         throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-    var migrationAssembly = Assembly.GetExecutingAssembly();
+    var migrationAssembly = Assembly.GetAssembly(typeof(ApplicationDbContext));
 
 
     #region Autofac Configuration
