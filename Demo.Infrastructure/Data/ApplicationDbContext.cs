@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Demo.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Infrastructure.Data
@@ -13,6 +14,7 @@ namespace Demo.Infrastructure.Data
         {
             
         }
+        public DbSet<Product>Products { get; set; }
 
         
 

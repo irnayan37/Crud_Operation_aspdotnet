@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Demo.Infrastructure.Data;
-using Demo.Web.Data;
 using Demo.Web.Utility;
 
 namespace Demo.Web

@@ -48,7 +48,10 @@ try
 
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString,
-    (x) => x.MigrationsAssembly(migrationAssembly)));
+    (x) => x.MigrationsAssembly(migrationAssembly.FullName)));
+
+
+    
 
     //IServiceCollection serviceCollection = builder.Services.AddDbContext<ApplicationDbContext>(options =>
     //    options.UseSqlServer(connectionString));
@@ -60,14 +63,8 @@ try
     builder.Services.AddControllersWithViews();
     builder.Services.AddRazorPages();
 
-    // throw new Exception("Test Error");
-    //builder.Services.AddSingleton<IEmailUtililty, HtmlEmailUtility>();
-    //builder.Services.AddTransient<IEmailUtililty,HtmlEmailUtility>();
-    //builder.Services.AddScoped<IEmailUtililty, HtmlEmailUtility>();
-    //builder.Services.AddKeyedScoped<IEmailUtililty, HtmlEmailUtility>("Setup1");//2 ta controller er alada alada setup constructor a dite hbe
-    //builder.Services.AddKeyedScoped<IEmailUtililty, EmailUtility>("Setup2");
-    //builder.Services.AddScoped(s =>
-   // new ApplicationDbContext(connectionString, migrationAssembly?.FullName));
+    
+    
 
 
 
@@ -102,7 +99,16 @@ try
 }
 catch(Exception ex)
 {
-    Log.Fatal(ex, "Application Crashed");
+    
+    var type = ex.GetType().Name;
+
+    if (type.Equals("StopTheHostException", StringComparison.Ordinal)
+        || type.Equals("HostAbortedException", StringComparison.Ordinal))
+    {
+        
+        Log.Fatal(ex, "Application Crashed");
+    }
+   // Log.Fatal(ex, "Application Crashed");
 
 }
 finally

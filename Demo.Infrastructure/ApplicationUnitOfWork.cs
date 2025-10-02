@@ -9,7 +9,7 @@ using Demo.Infrastructure.Data;
 
 namespace Demo.Infrastructure
 {
-    public abstract class ApplicationUnitOfWork : UnitOfWork,IApplicationUnitOfWork
+    public  class ApplicationUnitOfWork : UnitOfWork,IApplicationUnitOfWork
     {
         public IProductRepository ProductRepository { get;private set; }
         public ApplicationUnitOfWork(ApplicationDbContext context,IProductRepository productRepository)
