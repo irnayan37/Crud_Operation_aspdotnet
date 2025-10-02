@@ -7,6 +7,9 @@ using Demo.Web;
 using Microsoft.AspNetCore.Identity;
 using Demo.Infrastructure.Data;
 using Demo.Infrastructure.Extensions;
+using Cortex.Mediator.DependencyInjection;
+using Demo.Infrastructure.Data.Migrations;
+using Demo.Application.Features.Inventory.Commands;
 
 
 Log.Logger = new LoggerConfiguration()
@@ -40,6 +43,13 @@ try
 
     #endregion
 
+    #region Mediator Configuration
+    builder.Services.AddCortexMediator(
+        builder.Configuration,
+        new[] {typeof(Program),typeof(ProductAddCommand)},
+        options => options.AddDefaultBehaviors()
+        );
+    #endregion
     #region Service collection base Dependency Injection Configuration
     builder.Services.AddDependencyInjection();
     #endregion
