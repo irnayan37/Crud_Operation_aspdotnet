@@ -10,6 +10,9 @@ using Demo.Infrastructure.Extensions;
 using Cortex.Mediator.DependencyInjection;
 using Demo.Infrastructure.Data.Migrations;
 using Demo.Application.Features.Inventory.Commands;
+using Mapster;
+using MapsterMapper;
+using Demo.Infrastructure;
 
 
 Log.Logger = new LoggerConfiguration()
@@ -50,6 +53,15 @@ try
         options => options.AddDefaultBehaviors()
         );
     #endregion
+
+    #region Mapster Configuration
+    var Config = TypeAdapterConfig.GlobalSettings;
+    Config.Scan(typeof(MapsterConfiguration).Assembly);
+    builder.Services.AddSingleton(Config);
+    builder.Services.AddScoped<IMapper,ServiceMapper>();
+    #endregion
+
+
     #region Service collection base Dependency Injection Configuration
     builder.Services.AddDependencyInjection();
     #endregion

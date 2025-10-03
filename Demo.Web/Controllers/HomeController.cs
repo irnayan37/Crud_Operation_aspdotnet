@@ -24,11 +24,11 @@ namespace Demo.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var command = new ProductAddCommand { Name = "Monitor", Price = 20000 };
+            var command = new ProductAddCommand { Name = "Keyboard", Price = 600 };
             var product = await _mediator.SendCommandAsync<ProductAddCommand, Product>(command);
 
-            //var query = new ProductGetQuery { Id = new Guid ("F24E7D8A-EE8A-4414-BE15-BDF01249D720") };
-            //var result = await _mediator.SendQueryAsync<ProductGetQuery, Product>(query);
+            var query = new ProductGetQuery { Id = new Guid ("F24E7D8A-EE8A-4414-BE15-BDF01249D720") };
+            var result = await _mediator.SendQueryAsync<ProductGetQuery, Product>(query);
 
             return View();
         }
